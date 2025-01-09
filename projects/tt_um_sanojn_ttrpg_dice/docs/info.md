@@ -20,7 +20,8 @@ The 'polarity' config pins sets the active level for the corresponding I/O signa
 ## How to test
 
 Set clock frequency to 32768 Hz (10-100 kHz).
-Configure uio[7:5] for the appropriate signal polarity:
+Configure uio[7:5] for the appropriate signal polarity.
+For the demo board, set uio[7:5] to 011.
 
 | Seven segment                                       | uio[7:6] |
 | ----------------------------------------------------| -------- |
@@ -28,9 +29,19 @@ Configure uio[7:5] for the appropriate signal polarity:
 | Common anode, direct segment drive                  | 10       |
 | Inverting common anode drive, direct segment drive  | 00       |
 
-For the demo board, set uio[7:5] to 010
+uio[5] sets the active polarity of the input buttons.
 
-Press one of the buttons ui[6:0] (according to the selected button polarity) and release it.
+### Use DIP switches
+Uncheck the ui_in check box in the interact tab
+Reset the design
+Run these REPL commands in the commander:
+```
+tt.uio_oe_pico.value = 0b11100000
+tt.uio_oe_pico.value = 0b01100000
+```
+
+Flip all DIP switches to the up position.
+Flip one DIP switch down and then up again.
 The dice roll is shown on the LED display for about 8 seconds.
 
 * ui[0] rolls a d4 (four sided die).
@@ -41,11 +52,24 @@ The dice roll is shown on the LED display for about 8 seconds.
 * ui[5] rolls a d20
 * ui[6] rolls a d100
 
+### Use the commander
+Flip all DIP switches to the up position.
+Check the ui_in checkbox in the interact tab 
+Run these REPL commands in the commander:
+```
+tt.uio_oe_pico.value = 0b11100000
+tt.uio_oe_pico.value = 0b01100000
+```
+
+Choose the "momentary push button" option in the interact tab.
+Press and release a button to roll a die. This will work best with d4 - d10, as multi-digit dice will overlay both digits on the LED display.
+
 ## External hardware
 
-Pullups on ui[6:0] with pushbuttons closing to GND.
+The demo board is sufficient to roll d4 - d10.
 
-A two-digit LED display. Common anode and/or cathode are supported using the configuraiton pins.
+Larger dice require a dual digit display.
+Common anode and/or cathode are supported using the configuration pins.
 Segments are connected to uo[7:0] (DP, G, F, E, D, C, B, A in that order)
 Left cathode connected to uio[1]
 Right cathode to uio[0]
